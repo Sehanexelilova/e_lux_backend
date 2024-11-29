@@ -36,6 +36,7 @@ class Product extends Model
         'product_size' => 'array',
     ];
 
+    
     public function category()
     {
         return $this->belongsTo(Category::class);
