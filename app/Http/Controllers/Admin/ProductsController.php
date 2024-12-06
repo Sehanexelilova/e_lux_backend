@@ -53,6 +53,7 @@ class ProductsController extends Controller
                 'product_color' => 'required|array',
                 'product_size' => 'required|array',
                 'image.*' => 'image|mimes:jpeg,png,jpg,gif',
+                'other_photos.*' => 'image|mimes:jpeg,png,jpg,gif',
             ];
 
             $customMessages = [
@@ -66,7 +67,7 @@ class ProductsController extends Controller
                 'product_color.required' => 'Please select at least one color.',
                 'product_size.required' => 'Please select at least one size.',
                 'image.*.mimes' => 'Image must be a type of jpeg, png, jpg, gif',
-
+                'other_photos.*.mimes' => 'Other photos must be a type of jpeg, png, jpg, gif',
             ];
 
             $validator = Validator::make($data, $rules, $customMessages);
@@ -108,6 +109,14 @@ class ProductsController extends Controller
                     $filePath = $file->store('photos', 'public');
                     $product->image = $filePath;
                 }
+            }
+
+            if ($request->hasFile('other_photos')) {
+                $otherPhotos = [];
+                foreach ($request->file('other_photos') as $file) {
+                    $otherPhotos[] = $file->store('photos', 'public');
+                }
+                $product->other_photos = $otherPhotos;
             }
             $product->save();
 

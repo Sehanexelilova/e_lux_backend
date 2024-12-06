@@ -14,6 +14,7 @@ class Product extends Model
         'product_code',
         'product_color',
         'image',
+        'other_photos',
         'family_color',
         'product_size',
         'group_code',
@@ -28,12 +29,13 @@ class Product extends Model
         'meta_title',
         'meta_keyword',
         'meta_description',
-        
+
     ];
 
     protected $casts = [
         'product_color' => 'array',
         'product_size' => 'array',
+        'other_photos' => 'array',
     ];
 
     public function category()

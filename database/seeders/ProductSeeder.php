@@ -18,6 +18,7 @@ class ProductSeeder extends Seeder
             'product_name' => 'Sample Product',
             'product_code' => 'SP001',
             'product_color' => json_encode(['Red']),
+            'other_photos' => json_encode(['Red']),
             'family_color' => 'Red Family',
             'product_size' => json_encode(['M']),
             'group_code' => 'GC01',

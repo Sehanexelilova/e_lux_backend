@@ -20,6 +20,7 @@ class CreateProductsTable extends Migration
             $table->string('product_name');
             $table->string('product_code');
             $table->json('product_color');
+            $table->json('other_photos');
             $table->string('family_color');
             $table->json('product_size')->nullable();
             $table->string('group_code')->nullable();
