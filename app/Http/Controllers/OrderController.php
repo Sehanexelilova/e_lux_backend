@@ -94,10 +94,10 @@ class OrderController extends Controller
             OrderDetail::create([
                 'order_id' => $newOrder->id,
                 'product_name' => $product->product_name,
-                'size' => $basketProduct->selected_size,  // Make sure this is the correct field
+                'size' => $basketProduct->selected_size,  
                 'date' => now(),
                 'price' => $product->product_price,
-                'quantity' => $basketProduct->stock_count, // Assuming stock_count represents quantity in the basket
+                'quantity' => $basketProduct->stock_count, 
                 'total' => $subtotal,
             ]);
             
