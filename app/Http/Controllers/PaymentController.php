@@ -2,8 +2,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\PaymentMethods;
 use Illuminate\Http\Request;
+
 use Validator;
 
 class PaymentController extends Controller
@@ -47,18 +49,41 @@ class PaymentController extends Controller
                 return response()->json(['message' => 'Unsupported payment method'], 400);
         }
 
+        $quantity = 0;
+        foreach ($request->products as $product) {
+            $quantity += $product['quantity']; // Ürünlerin toplam miktarını hesapla
 
+        }
+        
         $order = Order::create([
             'user_id' => auth()->user()->id,
             "basket_id" => auth()->user()->basket->id,
             'total_amount' => $request->totalAmount,
             "uid" => uniqid(),
             "status" => 0,
-            'quantity' => 1,
+            'quantity' => $quantity,
             "address" => "Test",
             "payment_type" => $paymentMethod->name,
-            "total" => 55
+            "total" => $request->totalAmount
         ]);
+   
+
+        foreach ($request->products as $product) {
+            OrderDetail::create([
+                'order_id' => $order->id,
+                'uid'=>$order->uid,
+                'product_id' => $product['id'], 
+                'quantity' => $product['quantity'], 
+                'product_name' => $product['name'], 
+                'size' => $product['size'],
+                'price' => $product['price'], 
+                'total' => $product['price'] * $product['quantity'],
+                'image' => $product['image'],
+                'date' => now(),
+              
+            ]);
+        }
+        
 
         // return response()->json($order, 200);
 // nəysə geri qalanı sizlik )))
@@ -85,5 +110,11 @@ class PaymentController extends Controller
     {
         $methods = PaymentMethods::all();
         return response()->json(['data' => $methods]);
+    }
+    public function getOrderInfo()
+    {
+        $user_id = auth()->user()->id;
+        $order = Order::with('details')->where('user_id', $user_id)->orderBy('created_at', 'desc')->first();
+        return response()->json(['data' => $order]);
     }
 }

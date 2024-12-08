@@ -59,6 +59,7 @@ Route::middleware('api')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/orders', [OrderController::class, 'index']);
         Route::post('/orders', [OrderController::class, 'store']);
+        Route::get('/orders/order_info', [PaymentController::class, 'getOrderInfo']);
     });
     Route::post('/shipping-address', [ShippingAddressController::class, 'store']);
     Route::post('/process-payment', [PaymentController::class, 'processPayment'])->middleware('auth:sanctum');
