@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('basket_id');
-            // quantity ?????????
             $table->integer('quantity');
             $table->string('uid')->unique();
             $table->tinyInteger('status')->default(0);

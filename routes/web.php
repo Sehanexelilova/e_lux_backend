@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\BasketController;
 
 use App\Http\Controllers\Admin\ProductsDescriptionController;
+use App\Http\Controllers\OrderController;
 use App\Http\Middleware\Admin;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ProductReviewController;
@@ -25,12 +26,14 @@ Route::get('/', function () {
 });
 
 
-// Admin Routes
+// Admin Routes .. bu hissədə zatən prefix "admin" olaraq vermisiz aşağı hissələrdə yenidən admin yazmağınıza ehtiyyac yoxdur 
 Route::prefix('admin')->group(function () {
 
     // Admin Login
-    Route::get('/login', [AdminController::class, 'login'])->name('admin.login');
-    Route::post('/login', [AdminController::class, 'login']);
+    // bunlara middleware əlavə etməlisiz əgər admin giriş edibsə çıxış etmədiyi müddətcə bu routlara giriş edə bilməsin əgər girmək istəsə /dasboard səhifəsinə göndərsin. Belə bir middleware əlavə edərsiz
+    Route::get('/login', [AdminController::class, 'index'])->name('login');//????????????????????????????????????
+
+    Route::post('/login', [AdminController::class, 'login'])->name('admin.login.post');
 
     Route::middleware([Admin::class])->group(function () {
 
@@ -158,5 +161,15 @@ Route::prefix('admin')->group(function () {
             Route::post('/remove', [BasketController::class, 'remove'])->name('remove');
         });
         Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
+
+
+
+        //adminin login ui hissəsi var?ui nedi Login səhifəsi var admin üçün?))var oranı göstərin
+        Route::get('/orders', [OrderController::class, 'adminOrdersIndex'])->name('admin.orders.index');
+        Route::post('/orders/{id}/status', [OrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
+        // Route::middleware(["auth", 'admin'])->group(function () {
+
+        // });
+
     });
 });

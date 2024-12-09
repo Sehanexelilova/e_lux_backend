@@ -12,10 +12,9 @@ class PaymentController extends Controller
 {
     public function processPayment(Request $request)
     {
-        // // api yazanda validate yox Validator methodunu işlədin 
         $validate = Validator::make($request->all(), [
             'paymentMethodId' => 'required|exists:payment_methods,id',
-            'card_details.cardholderName' => 'required_if:paymentMethodId,1|string|max:255', // Credit Card Only
+            'card_details.cardholderName' => 'required_if:paymentMethodId,1|string|max:255', 
             'card_details.cardNumber' => 'required_if:paymentMethodId,1|string|max:16',
             'card_details.expirationDate' => 'required_if:paymentMethodId,1|string|max:5',
             'card_details.cvc' => 'required_if:paymentMethodId,1|string|max:4',
@@ -51,7 +50,7 @@ class PaymentController extends Controller
 
         $quantity = 0;
         foreach ($request->products as $product) {
-            $quantity += $product['quantity']; // Ürünlerin toplam miktarını hesapla
+            $quantity += $product['quantity']; 
 
         }
         
@@ -85,8 +84,7 @@ class PaymentController extends Controller
         }
         
 
-        // return response()->json($order, 200);
-// nəysə geri qalanı sizlik )))
+      
 
         $paymentInfo = [
             'order_id' => $order->id,
@@ -104,6 +102,7 @@ class PaymentController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Payment processed successfully!',
+            'order' => $order
         ], 200);
     }
     public function getPaymentMethods()

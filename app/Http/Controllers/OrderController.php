@@ -17,7 +17,6 @@ class OrderController extends Controller
     {
         $user = Auth::user();
 
-      
         $orders = Order::with('details')->where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
 
         if ($orders->isEmpty()) {
@@ -36,6 +35,7 @@ class OrderController extends Controller
                 'address' => $order->address,
                 'payment_type' => $order->payment_type,
                 'total' => $order->total,
+                'status' => $order->status,  // statusu da daxil et
             ];
         });
 
@@ -45,10 +45,14 @@ class OrderController extends Controller
             "message" => "Orders fetched successfully"
         ]);
     }
-
+    public function adminOrdersIndex()
+    {
+        $orders = Order::all();
+        return view('admin.orders.index', compact('orders'));
+    }
+    
     public function store(Request $req)
     {
-        
         $validator = Validator::make($req->all(), [
             'address' => 'required|string|max:255',
             'payment_type' => 'required|string|max:50',
@@ -80,6 +84,7 @@ class OrderController extends Controller
             'payment_type' => $req->payments,
             'uid' => uniqid(),
             'total' => 0,
+            'status' => 0, 
         ]);
 
         foreach ($basketProducts as $basketProduct) {
@@ -94,21 +99,18 @@ class OrderController extends Controller
             OrderDetail::create([
                 'order_id' => $newOrder->id,
                 'product_name' => $product->product_name,
-                'size' => $basketProduct->selected_size,  
+                'size' => $basketProduct->selected_size,
                 'date' => now(),
                 'price' => $product->product_price,
-                'quantity' => $basketProduct->stock_count, 
+                'quantity' => $basketProduct->stock_count,
                 'total' => $subtotal,
             ]);
-            
 
             $total += $subtotal;
         }
 
-    
         $newOrder->update(['total' => $total]);
 
-        
         BasketProduct::where('basket_id', $user->basket->id)->delete();
 
         return response()->json([
@@ -117,4 +119,20 @@ class OrderController extends Controller
             'order_id' => $newOrder->id
         ]);
     }
+  
+
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|integer|min:0|max:4',
+        ]);
+
+        $order = Order::findOrFail($id);
+        $order->status = $request->status;
+        $order->save();
+
+        return redirect()->back()->with('success', 'Order status updated successfully.');
+    }
+
+    
 }
