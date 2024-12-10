@@ -129,10 +129,9 @@ class ProductsController extends Controller
     }
 
     //For Api
-
     public function getProducts()
     {
-        $products = Product::all();
+        $products = Product::with('category')->get();
         return response()->json(['products' => $products]);
     }
 
