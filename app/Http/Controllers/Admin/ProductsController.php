@@ -46,7 +46,7 @@ class ProductsController extends Controller
 
             $rules = [
                 'category_id' => 'required|exists:categories,id',
-                'product_name' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
+                'product_name' => 'required',
                 'product_code' => 'required|alpha_num',
                 'product_price' => 'required|numeric|min:0',
                 'family_color' => 'required|string',
@@ -196,5 +196,27 @@ class ProductsController extends Controller
 
         return response()->json(['products' => $products], 200);
     }
+//     public function getSuggestedProducts($id)
+// {
+ 
+//     $product = Product::find($id);
+
+//     if (!$product) {
+//         return response()->json([
+//             'error' => 'Məhsul tapılmadı',
+//         ], 404);
+//     }
+
+//     // Eyni kateqoriyadakı digər məhsulları tap
+//     $suggestedProducts = Product::where('category', $product->category)
+//         ->where('id', '!=', $product->id) // Mövcud məhsuldan fərqli olsun
+//         ->take(5) // Maksimum 5 məhsul göstər
+//         ->get();
+
+//     return response()->json([
+//         'suggestedProducts' => $suggestedProducts,
+//     ]);
+// }
+
 
 }

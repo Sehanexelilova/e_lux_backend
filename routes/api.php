@@ -30,6 +30,8 @@ Route::middleware('api')->group(function () {
     Route::get('/our-services', [OurServicesController::class, 'getOurServices']);
     Route::get('/products', [ProductsController::class, 'getProducts']);
     Route::get('/product-details/{id}', [ProductsDescriptionController::class, 'show']);
+    Route::get('/products/suggestions/{id}', [ProductsController::class, 'getSuggestedProducts']);
+
     Route::get('/posts', [PostController::class, 'getPosts']);
     Route::get('/posts/{id}', [PostController::class, 'show']);
 
