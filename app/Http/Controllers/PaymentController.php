@@ -98,6 +98,7 @@ class PaymentController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]));
+        \DB::table('basket_products')->where('basket_id', auth()->user()->basket->id)->delete();
 
         return response()->json([
             'status' => 'success',
