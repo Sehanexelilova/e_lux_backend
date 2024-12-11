@@ -195,27 +195,28 @@ class ProductsController extends Controller
 
         return response()->json(['products' => $products], 200);
     }
-//     public function getSuggestedProducts($id)
-// {
+    public function getSuggestedProducts($id)
+{
  
-//     $product = Product::find($id);
+    $product = Product::find($id);
 
-//     if (!$product) {
-//         return response()->json([
-//             'error' => 'Məhsul tapılmadı',
-//         ], 404);
-//     }
+    if (!$product) {
+        return response()->json([
+            'error' => 'Məhsul tapılmadı',
+        ], 404);
+    }
 
-//     // Eyni kateqoriyadakı digər məhsulları tap
-//     $suggestedProducts = Product::where('category', $product->category)
-//         ->where('id', '!=', $product->id) // Mövcud məhsuldan fərqli olsun
-//         ->take(5) // Maksimum 5 məhsul göstər
-//         ->get();
+    // Eyni kateqoriyadakı digər məhsulları tap
+    $suggestedProducts = Product::where('category_id', $product->category_id)
+    ->where('id', '!=', $product->id)
+    ->take(5)
+    ->get();
 
-//     return response()->json([
-//         'suggestedProducts' => $suggestedProducts,
-//     ]);
-// }
+
+    return response()->json([
+        'suggestedProducts' => $suggestedProducts,
+    ]);
+}
 
 
 }
