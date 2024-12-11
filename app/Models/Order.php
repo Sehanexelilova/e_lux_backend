@@ -19,6 +19,22 @@ class Order extends Model
         'shipping_adress_id', // Make sure this is consistent with the migration
         'total',
     ];
+    public static function getStatuses()
+    {
+        return [
+            0 => 'Pending',
+            1 => 'Processing',
+            2 => 'Shipped',
+            3 => 'Delivered',
+            4 => 'Cancelled',
+        ];
+    }
+
+    public function getStatusTextAttribute()
+    {
+        return self::getStatuses()[$this->status] ?? 'Unknown';
+    }
+
 
     public function details()
     {

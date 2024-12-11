@@ -31,9 +31,9 @@
                 <td>${{ $method->min_amount }}</td>
                 <td>${{ $method->max_amount }}</td>
                 <td>${{ $method->additional_charges }}</td>
-                @if ($method->image)
+      <td>          @if ($method->image)
     <img src="{{ asset('storage/' . $method->image) }}" alt="{{ $method->name }}" width="100">
-@endif
+@endif</td>
 
                 <td>
                     <a href="{{ route('admin.shipping.edit', $method->id) }}" class="btn btn-sm btn-warning">Edit</a>
