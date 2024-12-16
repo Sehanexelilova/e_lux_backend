@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\ProductReview;
 use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class ProductReviewController extends Controller
 {
@@ -52,7 +53,18 @@ class ProductReviewController extends Controller
     public function store(Request $request)
     {
 
-        $validated = $request->validate([
+        // api validate işlədilmir Validator
+        // $validated = $request->validate([
+        //     'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        //     'profile_name' => 'required|string',
+        //     'comment' => 'required|string',
+        //     'like' => 'nullable|integer',
+        //     'dislike' => 'nullable|integer',
+        //     'time' => 'nullable|date',
+        //     'common_review' => 'nullable|integer',
+        //     'product_id' => 'required|exists:products,id',
+        // ]);
+        $validate = Validator::make($request->all(),[
             'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'profile_name' => 'required|string',
             'comment' => 'required|string',
@@ -63,19 +75,31 @@ class ProductReviewController extends Controller
             'product_id' => 'required|exists:products,id',
         ]);
 
+        if($validate->fails()){
+            return response()->json(['error'=>$validate->errors()], 400);
+        }
+
 
         if ($request->hasFile('profile_photo')) {
             $path = $request->file('profile_photo')->store('profile_photos', 'public');
-            $validated['profile_photo'] = $path;
+            $request['profile_photo'] = $path;
         }
 
-        $review = ProductReview::create($validated);
+        $review = new ProductReview();
+
+        $review->fill($request->all());
+
+        if($review->save()){
 
         return response()->json([
             'success' => true,
             'message' => 'Review created successfully.',
             'data' => $review
-        ], 201);
+        ], 201);}else{
+            return response()->json([
+                'error' => 'Error creating review.'
+            ], 500);
+        }
     }
 
     public function update(Request $request, $id)
