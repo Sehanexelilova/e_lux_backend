@@ -9,6 +9,7 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
 
 
+
 class ProductReviewController extends Controller
 {
     public function index()
@@ -113,5 +114,28 @@ class ProductReviewController extends Controller
             'message' => 'Review deleted successfully.',
         ], 200);
     }
+    public function likeReview($id)
+    {
+        $review = ProductReview::find($id);
+        if ($review) {
+            $review->likes += 1;
+            $review->save();
+            return response()->json(['likes' => $review->likes]);
+        }
+        return response()->json(['message' => 'Review not found'], 404);
+    }
     
+    public function dislikeReview($id)
+    {
+        $review = ProductReview::find($id);
+        if ($review) {
+            $review->dislikes += 1;
+            $review->save();
+            return response()->json(['dislikes' => $review->dislikes]);
+        }
+        return response()->json(['message' => 'Review not found'], 404);
+    }
+    
+    
+
 }
