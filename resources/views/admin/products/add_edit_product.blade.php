@@ -116,17 +116,17 @@
                         </select>
                     </div>
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="description">Description</label>
                         <textarea name="description" id="description" class="form-control" rows="4"
                                   required>{{ old('description', $product->description ?? '') }}</textarea>
-                    </div>
+                    </div> -->
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="group_code">Group Code</label>
                         <input name="group_code" id="group_code" class="form-control"
                                rows="4">{{ old('group_code', $product->group_code ?? '') }}
-                    </div>
+                    </div> -->
 
                     <div class="form-group">
                         <label for="product_price">Product Price</label>
@@ -146,16 +146,16 @@
                         <input type="number" name="quantity" id="discount" class="form-control" step="0.01"
                                value="{{ old('quantity', $product->quantity ?? '') }}">
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label>Free Shipping</label>
                         <div class="form-check">
                             <input type="checkbox" name="free_shipping" id="free_shipping"
                                    class="form-check-input" {{ (old('free_shipping', $product->free_shipping ?? 0) ? 'checked' : '') }}>
                             <label for="free_shipping" class="form-check-label">Enable free shipping</label>
                         </div>
-                    </div>
+                    </div> -->
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label>Free Changes & Return</label>
                         <div class="form-check">
                             <input type="checkbox" name="free_changes_return" id="free_changes_return"
@@ -177,9 +177,9 @@
                         {{--    </select>--}}
                         {{--</div>--}}
 
-                    </div>
+                    </div> -->
 
-
+<!-- 
                     <div class="form-group">
                         <label for="meta_title">Meta Title</label>
                         <input type="text" name="meta_title" id="meta_title" class="form-control"
@@ -214,7 +214,7 @@
                         <label for="pattern">Pattern</label>
                         <input type="text" name="pattern" id="pattern" class="form-control"
                                value="{{ old('pattern', $product->pattern ?? '') }}">
-                    </div>
+                    </div> -->
 
                     <div class="form-group">
                         <label for="images">Product Images</label>

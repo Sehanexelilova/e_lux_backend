@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\PartnerController;
@@ -43,6 +44,10 @@ Route::middleware('api')->group(function () {
     Route::delete('/product-reviews/{id}', [ProductReviewController::class, 'destroy']);
     Route::get('/product-reviews', [ProductReviewController::class, 'index']);
     Route::get('/product-reviews/{productId}', [ProductReviewController::class, 'getReviewsByProduct']);
+    Route::post('/review/{id}/like', [ProductReviewController::class, 'likeReview']);
+    Route::post('/review/{id}/dislike', [ProductReviewController::class, 'dislikeReview']);
+    
+
 
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
