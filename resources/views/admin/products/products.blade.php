@@ -38,8 +38,9 @@
                     <tr>
                         <th>Product ID</th>
                         <th>Product Name</th>
-                        <th>Product Code</th>
+                        <th>Product Style</th>
                         <th>Product Color</th>
+                        <th>Gender</th>
                         <th>Quantity</th>
                         <th>Image</th>
                         <th>Status</th>
@@ -52,7 +53,8 @@
                         <tr>
                             <td>{{ $product['id'] }}</td>
                             <td>{{ $product['product_name'] }}</td>
-                            <td>{{ $product['product_code'] }}</td>
+                            <td>{{ $product['style'] }}</td>
+                            
                             <td>
                                 @if(is_array($product['product_color']))
                                     @foreach($product['product_color'] as $color)
@@ -60,6 +62,17 @@
                                     @endforeach
                                 @else
                                     <span class="badge badge-secondary">No Colors</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if($product['gender'] == 'male')
+                                    <span class="badge badge-primary">Kişi</span>
+                                @elseif($product['gender'] == 'female')
+                                    <span class="badge badge-danger">Qadın</span>
+                                @elseif($product['gender'] == 'child')
+                                    <span class="badge badge-warning">Uşaq</span>
+                                @elseif($product['gender'] == 'unisex')
+                                    <span class="badge badge-info">Unisex</span>
                                 @endif
                             </td>
                             <td>{{ $product['quantity'] }}</td>
@@ -92,9 +105,7 @@
         <i class="fas fa-trash"></i>
     </button>
 </form>
-                                <!-- <button type="button" class="btn btn-danger btn-sm delete-button" data-id="{{ $product['id'] }}" data-toggle="modal" data-target="#deleteModal">
-                                    <i class="fas fa-trash"></i>
-                                </button> -->
+                            
                             </td>
                         </tr>
 
@@ -110,7 +121,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <p><strong>Product ID:</strong> {{ $product['id'] }}</p>
-                                        <p><strong>Product Code:</strong> {{ $product['product_code'] }}</p>
+                                        <p><strong>Product style:</strong> {{ $product['style'] }}</p>
                                         <p>
                                             @if(is_array($product['product_color']))
                                                 @foreach($product['product_color'] as $color)

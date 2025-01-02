@@ -14,7 +14,7 @@ class PaymentController extends Controller
     {
         $validate = Validator::make($request->all(), [
             'paymentMethodId' => 'required|exists:payment_methods,id',
-            'card_details.cardholderName' => 'required_if:paymentMethodId,1|string|max:255', 
+            'card_details.cardholderName' => 'required_if:paymentMethodId,1|string|max:255',
             'card_details.cardNumber' => 'required_if:paymentMethodId,1|string|max:16',
             'card_details.expirationDate' => 'required_if:paymentMethodId,1|string|max:5',
             'card_details.cvc' => 'required_if:paymentMethodId,1|string|max:4',
@@ -50,10 +50,11 @@ class PaymentController extends Controller
 
         $quantity = 0;
         foreach ($request->products as $product) {
-            $quantity += $product['quantity']; 
+            $quantity += $product['quantity'];
 
         }
-        
+
+        $dummyAdress = ["New York 2965 Veterans Rd W", "New York Hamilton Ontario", "United States High Wycombe"];
         $order = Order::create([
             'user_id' => auth()->user()->id,
             "basket_id" => auth()->user()->basket->id,
@@ -61,30 +62,30 @@ class PaymentController extends Controller
             "uid" => uniqid(),
             "status" => 0,
             'quantity' => $quantity,
-            "address" => "Test",
+            "address" => $dummyAdress[rand(0, count($dummyAdress) - 1)],
             "payment_type" => $paymentMethod->name,
             "total" => $request->totalAmount
         ]);
-   
+
 
         foreach ($request->products as $product) {
             OrderDetail::create([
                 'order_id' => $order->id,
-                'uid'=>$order->uid,
-                'product_id' => $product['id'], 
-                'quantity' => $product['quantity'], 
-                'product_name' => $product['name'], 
+                'uid' => $order->uid,
+                'product_id' => $product['id'],
+                'quantity' => $product['quantity'],
+                'product_name' => $product['name'],
                 'size' => $product['size'],
-                'price' => $product['price'], 
+                'price' => $product['price'],
                 'total' => $product['price'] * $product['quantity'],
                 'image' => $product['image'],
                 'date' => now(),
-              
+
             ]);
         }
-        
 
-      
+
+
 
         $paymentInfo = [
             'order_id' => $order->id,

@@ -46,8 +46,7 @@ class OrderController extends Controller
         ]);
     }
     public function adminOrdersIndex()
-    {
-        $orders = Order::all();
+    {$orders = Order::with('details')->get();
         return view('admin.orders.index', compact('orders'));
     }
     
