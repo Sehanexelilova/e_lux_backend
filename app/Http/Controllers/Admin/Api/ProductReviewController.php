@@ -29,11 +29,13 @@ class ProductReviewController extends Controller
 
         $product = Product::find($productId);
         if (!$product) {
+            \Log::error('Ürün bulunamadı', ['productId' => $productId]);
             return response()->json([
                 'success' => false,
                 'message' => 'Product not found.'
             ], 404);
         }
+        
 
         $reviews = ProductReview::where('product_id', $productId)->get();
 
@@ -53,17 +55,7 @@ class ProductReviewController extends Controller
     public function store(Request $request)
     {
 
-        // api validate işlədilmir Validator
-        // $validated = $request->validate([
-        //     'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        //     'profile_name' => 'required|string',
-        //     'comment' => 'required|string',
-        //     'like' => 'nullable|integer',
-        //     'dislike' => 'nullable|integer',
-        //     'time' => 'nullable|date',
-        //     'common_review' => 'nullable|integer',
-        //     'product_id' => 'required|exists:products,id',
-        // ]);
+
         $validate = Validator::make($request->all(),[
             'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'profile_name' => 'required|string',
@@ -79,15 +71,16 @@ class ProductReviewController extends Controller
             return response()->json(['error'=>$validate->errors()], 400);
         }
 
-
-        if ($request->hasFile('profile_photo')) {
-            $path = $request->file('profile_photo')->store('profile_photos', 'public');
-            $request['profile_photo'] = $path;
-        }
-
         $review = new ProductReview();
 
         $review->fill($request->all());
+
+        if ($request->hasFile('profile_photo')) {
+            $path = $request->file('profile_photo')->store('profile_photos', 'public'); 
+            $review->profile_photo = $path;
+        }
+        
+
 
         if($review->save()){
 

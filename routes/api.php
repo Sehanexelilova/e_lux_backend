@@ -32,10 +32,8 @@ Route::middleware('api')->group(function () {
     Route::get('/products', [ProductsController::class, 'getProducts']);
     Route::get('/product-details/{id}', [ProductsDescriptionController::class, 'show']);
     Route::get('/products/suggestions/{id}', [ProductsController::class, 'getSuggestedProducts']);
-
     Route::get('/posts', [PostController::class, 'getPosts']);
     Route::get('/posts/{id}', [PostController::class, 'show']);
-
     Route::get('product/category/{categoryId}', [ProductsController::class, 'getProductsByCategory'])->name('admin.products.by_category');
     Route::post('/filter-products', [ProductsController::class, 'filterProducts']);
     Route::get('product/search', [ProductsController::class, 'searchProducts'])->name('admin.products.search');
@@ -46,18 +44,14 @@ Route::middleware('api')->group(function () {
     Route::get('/product-reviews/{productId}', [ProductReviewController::class, 'getReviewsByProduct']);
     Route::post('/review/{id}/like', [ProductReviewController::class, 'likeReview']);
     Route::post('/review/{id}/dislike', [ProductReviewController::class, 'dislikeReview']);
-    
-
-
+    Route::get("/categories", [ProductsController::class, 'getCategories']);
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
-
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/me', [AuthController::class, 'me']);
         Route::post('/logout', [AuthController::class, 'logout']);
     });
     //cart
-
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/cart', [BasketController::class, 'index']);
         Route::post('/cart/store', [BasketController::class, 'store']);

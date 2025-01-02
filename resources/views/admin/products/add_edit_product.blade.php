@@ -48,9 +48,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="product_code">Product Code</label>
-                        <input type="text" name="product_code" id="product_code" class="form-control"
-                               value="{{ old('product_code', $product->product_code ?? '') }}" required>
+                        <label for="style">Product Style</label>
+                        <input type="text" name="style" id="style" class="form-control"
+                               value="{{ old('style', $product->style ?? '') }}" required>
                     </div>
 
                     {{--                <div class="form-group">--}}
@@ -69,6 +69,14 @@
                             @endforeach
                         </select>
                     </div>
+                    <label for="gender">Cinsiyyət</label>
+<select id="gender" name="gender" class="form-control">
+    <option value="male">Kişi</option>
+    <option value="female">Qadın</option>
+    <option value="child">Uşaq</option>
+    <option value="unisex">Unisex</option>
+</select>
+
 
                     <div class="form-group">
                         <label for="product_sizes">Product Sizes Stock (multiple)</label>

@@ -14,7 +14,7 @@
         <thead>
             <tr>
                 <th>#</th>
-                <th>Order ID</th>
+                <th>Products</th>
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
@@ -23,7 +23,11 @@
             @foreach ($orders as $order)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $order->id }}</td>
+                    <td>
+                        @foreach ($order->details as $detail)
+                            <p>{{ $detail->product_name }}</p>
+                        @endforeach
+                    </td>
                     <td>{{ $order->status_text }}</td>
                     <td>
                         <form action="{{ route('admin.orders.updateStatus', $order->id) }}" method="POST">

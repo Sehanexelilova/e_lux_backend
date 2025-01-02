@@ -16,6 +16,19 @@ class ProductsController extends Controller
         return view('admin.products.products')->with(compact('products'));
     }
 
+    public function getCategories()
+    {
+
+        $categories = Category::all();
+        if ($categories) {
+            return response()->json(['categories' => $categories]);
+        }else{
+            return response()->json(['categories' => []]);
+        }
+
+
+    }
+
     public function update_product(Request $request, $id)
     {
         if ($request->isMethod('post')) {
@@ -47,7 +60,7 @@ class ProductsController extends Controller
             $rules = [
                 'category_id' => 'required|exists:categories,id',
                 'product_name' => 'required',
-                'product_code' => 'required|alpha_num',
+                'style' => 'required|alpha_num',
                 'product_price' => 'required|numeric|min:0',
                 'family_color' => 'required|string',
                 'product_color' => 'required|array',
@@ -60,7 +73,7 @@ class ProductsController extends Controller
                 'category_id.required' => 'Category name is required',
                 'product_name.required' => 'Product name is required',
                 'product_name.regex' => 'Valid name is required',
-                'product_code.required' => 'Product code is required',
+                'style.required' => 'style is required',
                 'product_price.required' => 'Product price is required',
                 'family_color.required' => 'Family color is required',
                 'image.*.image' => 'Uploaded file must be an image',
@@ -81,10 +94,11 @@ class ProductsController extends Controller
 
             $product->category_id = $data['category_id'];
             $product->product_name = $data['product_name'];
-            $product->product_code = $data['product_code'];
+            $product->style = $data['style'];
             $product->family_color = $data['family_color'];
             $product->group_code = $data['group_code'] ?? null;
             $product->product_color = $data['product_color'];
+            $product->gender = $data['gender'];
             $product->product_size = $data['product_size'];
             $product->product_price = $data['product_price'];
             $product->product_discount = $data['product_discount'] ?? 0;
@@ -137,6 +151,8 @@ class ProductsController extends Controller
 
     public function getProductsByCategory($categoryId)
     {
+
+        // return response()->json($categoryId);
         $products = Product::where('category_id', $categoryId)->get();
 
         if ($products->isEmpty()) {
@@ -167,7 +183,7 @@ class ProductsController extends Controller
     {
         $priceRange = $request->input('price');
         $colors = $request->input('color');
-        $fit = $request->input('fit');
+        $styles = $request->input('style');
 
         $query = Product::query();
 
@@ -176,15 +192,16 @@ class ProductsController extends Controller
         }
 
         if (!empty($colors)) {
-            $query->where(function($q) use ($colors) {
+            $query->where(function ($q) use ($colors) {
                 foreach ($colors as $color) {
                     $q->orWhereJsonContains('product_color', $color);
                 }
             });
         }
 
-        if (!empty($fit)) {
-            $query->where('brand_id', $fit);
+
+        if (!empty($styles)) {
+            $query->whereIn('style', $styles);
         }
 
         $products = $query->get();
@@ -195,28 +212,28 @@ class ProductsController extends Controller
 
         return response()->json(['products' => $products], 200);
     }
+
     public function getSuggestedProducts($id)
-{
- 
-    $product = Product::find($id);
+    {
 
-    if (!$product) {
+        $product = Product::find($id);
+
+        if (!$product) {
+            return response()->json([
+                'error' => 'Məhsul tapılmadı',
+            ], 404);
+        }
+
+        $suggestedProducts = Product::where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->take(5)
+            ->get();
+
+
         return response()->json([
-            'error' => 'Məhsul tapılmadı',
-        ], 404);
+            'suggestedProducts' => $suggestedProducts,
+        ]);
     }
-
-    // Eyni kateqoriyadakı digər məhsulları tap
-    $suggestedProducts = Product::where('category_id', $product->category_id)
-    ->where('id', '!=', $product->id)
-    ->take(5)
-    ->get();
-
-
-    return response()->json([
-        'suggestedProducts' => $suggestedProducts,
-    ]);
-}
 
 
 }

@@ -16,7 +16,7 @@ class ProductSeeder extends Seeder
             'category_id' => 1,
             'brand_id' => 1,
             'product_name' => 'Sample Product',
-            'product_code' => 'SP001',
+            'style' => 'SP001',
             'product_color' => json_encode(['Red']),
             'other_photos' => json_encode(['Red']),
             'family_color' => 'Red Family',
